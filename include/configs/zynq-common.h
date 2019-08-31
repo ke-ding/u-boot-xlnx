@@ -158,7 +158,9 @@
 
 /* cc108 requires to be 0xF00000 to have boot.bin with bitstream included */
 # ifndef CONFIG_ENV_OFFSET
-#  define CONFIG_ENV_OFFSET		0xE0000
+//         0 - 0x17cffff for BOOT.bin (24M - 128K)
+// 0x17e0000 - 0x17fffff for u-boot env-vars (128K)
+#  define CONFIG_ENV_OFFSET		0x17E0000
 # endif
 #endif
 
@@ -219,18 +221,18 @@
 #define CONFIG_EXTRA_ENV_SETTINGS	\
 	"ethaddr=00:0a:35:00:01:22\0"	\
 	"kernel_image=uImage\0"	\
-	"kernel_load_address=0x2080000\0" \
+	"kernel_load_address=0x2000000\0" \
 	"ramdisk_image=uramdisk.image.gz\0"	\
-	"ramdisk_load_address=0x4000000\0"	\
+	"ramdisk_load_address=0x2400000\0"	\
 	"devicetree_image=devicetree.dtb\0"	\
-	"devicetree_load_address=0x2000000\0"	\
+	"devicetree_load_address=0x23E0000\0"	\
 	"bitstream_image=system.bit.bin\0"	\
 	"boot_image=BOOT.bin\0"	\
 	"loadbit_addr=0x100000\0"	\
-	"loadbootenv_addr=0x2000000\0" \
-	"kernel_size=0x500000\0"	\
+	"loadbootenv_addr=0x1000000\0" \
+	"kernel_size=0x3E0000\0"	\
 	"devicetree_size=0x20000\0"	\
-	"ramdisk_size=0x5E0000\0"	\
+	"ramdisk_size=0x1400000\0"	\
 	"boot_size=0xF00000\0"	\
 	"fdt_high=0x20000000\0"	\
 	"initrd_high=0x20000000\0"	\
@@ -287,10 +289,10 @@
 			"bootm ${kernel_load_address} ${ramdisk_load_address} ${devicetree_load_address}; " \
 		"fi\0" \
 	"nandboot=echo Copying Linux from NAND flash to RAM... && " \
-		"nand read ${kernel_load_address} 0x100000 ${kernel_size} && " \
-		"nand read ${devicetree_load_address} 0x600000 ${devicetree_size} && " \
+		"nand read ${kernel_load_address} 0x1800000 ${kernel_size} && " \
+		"nand read ${devicetree_load_address} 0x1be0000 ${devicetree_size} && " \
 		"echo Copying ramdisk... && " \
-		"nand read ${ramdisk_load_address} 0x620000 ${ramdisk_size} && " \
+		"nand read ${ramdisk_load_address} 0x1c00000 ${ramdisk_size} && " \
 		"bootm ${kernel_load_address} ${ramdisk_load_address} ${devicetree_load_address}\0" \
 	"jtagboot=echo TFTPing Linux to RAM... && " \
 		"tftpboot ${kernel_load_address} ${kernel_image} && " \
